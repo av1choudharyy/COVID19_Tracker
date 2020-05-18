@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Covid - 19 Tracker</string>
+    <string name="total_india">India Total Cases</string>
+    <string name="cured">Recovered</string>
+    <string name="deaths">Deaths</string>
+    <string name="confirmed">Confirmed</string>
+    <string name="header">header</string>
+    <string name="cases_today">Cases Today</string>
+    <string name="total_active_cases">Total Active Cases</string>
+    <string name="total_tests_conducted">Total Tests Conducted</string>
+    <string name="deceased">Deceased</string>
+    <string name="covid_19_india_stats">COVID-19 India Stats</string>
+    <string name="call_hepline_number">Call Hepline Number</string>
+</resources>
