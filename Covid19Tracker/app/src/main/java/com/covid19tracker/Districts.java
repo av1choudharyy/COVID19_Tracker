@@ -1,6 +1,6 @@
 package com.covid19tracker;
 
-public class Districts {
+class Districts {
     private String name;
     private int confirmed;
 

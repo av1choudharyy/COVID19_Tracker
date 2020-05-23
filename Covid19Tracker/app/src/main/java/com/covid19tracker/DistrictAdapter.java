@@ -13,7 +13,7 @@ import java.util.List;
 
 public class DistrictAdapter extends RecyclerView.Adapter<DistrictAdapter.ViewHolder> {
 
-    private List districts;
+    private final List districts;
 
     DistrictAdapter(List districts) {
         this.districts = districts;
@@ -42,10 +42,10 @@ public class DistrictAdapter extends RecyclerView.Adapter<DistrictAdapter.ViewHo
         return districts.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView name;
-        TextView confirmed;
+        final TextView name;
+        final TextView confirmed;
 
         ViewHolder(View itemView) {
             super(itemView);

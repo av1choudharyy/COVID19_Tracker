@@ -40,19 +40,25 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    TextView stateActiveCases, stateConfirmed, stateDeceased, stateRecovered, cChanges, rChanges, dChanges;
-    String State;
-    Spinner stateView;
-    int check = 0;
-    FusedLocationProviderClient fusedLocationProviderClient;
+    private TextView stateActiveCases;
+    private TextView stateConfirmed;
+    private TextView stateDeceased;
+    private TextView stateRecovered;
+    private TextView cChanges;
+    private TextView rChanges;
+    private TextView dChanges;
+    private String State;
+    private Spinner stateView;
+    private int check = 0;
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
-    RecyclerView recyclerView;
-    RecyclerView.Adapter<DistrictAdapter.ViewHolder> mAdapter;
-    RecyclerView.LayoutManager layoutManager;
-    ArrayAdapter<String> arrayAdapter;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter<DistrictAdapter.ViewHolder> mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private ArrayAdapter<String> arrayAdapter;
 
-    List<Districts> districtsList;
-    ArrayList<String>  States;
+    private List<Districts> districtsList;
+    private ArrayList<String> States;
 
 
     @SuppressLint("SourceLockedOrientationActivity")
