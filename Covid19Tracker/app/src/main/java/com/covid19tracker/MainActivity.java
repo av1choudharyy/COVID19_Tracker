@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                     List<Address> addresses = geocoder.getFromLocation(
                             location.getLatitude(), location.getLongitude(), 1
                     );
-                    stateData(addresses.get(0).getAdminArea());
+                    stateData(addresses.get(0).getAdminArea(), addresses.get(0).getLocality());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void stateData(final String stateName) {
+    private void stateData(final String stateName, final String cityName) {
         final RequestQueue requestQueue;
         requestQueue = Volley.newRequestQueue(this);
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, "https://api.covidindiatracker.com/state_data.json", null, arrayResponse -> {
@@ -181,9 +181,21 @@ public class MainActivity extends AppCompatActivity {
                         rChanges.setText(stateRChanges);
                         dChanges.setText(stateDChanges);
                         JSONArray array = obj.getJSONArray("districtData");
+                        for (int j = 0; j < array.length(); j++) {
+                            Districts districts = new Districts();
+                            JSONObject obj1 = array.getJSONObject(j);
+                            if (obj1.getString("name").equals(cityName)) {
+                                districts.setName(obj1.getString("name"));
+                                districts.setConfirmed((obj1.getInt("confirmed")));
+                                districtsList.add(districts);
+                            }
+                        }
                         for (int k = 0; k < array.length(); k++) {
                             Districts districts = new Districts();
                             JSONObject obj1 = array.getJSONObject(k);
+                            if (obj1.getString("name").equals(cityName)) {
+                                continue;
+                            }
                             districts.setName(obj1.getString("name"));
                             districts.setConfirmed(obj1.getInt("confirmed"));
                             districtsList.add(districts);
