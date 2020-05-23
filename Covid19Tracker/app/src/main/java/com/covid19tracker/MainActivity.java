@@ -241,6 +241,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void about(View view) {
-        startActivity(new Intent(MainActivity.this, About.class));
+        startActivity(new Intent(this, About.class));
     }
 }

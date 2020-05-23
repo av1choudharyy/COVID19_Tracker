@@ -9,11 +9,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class About extends AppCompatActivity {
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_about);
         final TextView github = findViewById(R.id.textView35);
         github.setMovementMethod(LinkMovementMethod.getInstance());
@@ -26,7 +25,8 @@ public class About extends AppCompatActivity {
     }
 
     public void home(View view) {
-        startActivity(new Intent(About.this, MainActivity.class));
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         finish();
     }
 }
