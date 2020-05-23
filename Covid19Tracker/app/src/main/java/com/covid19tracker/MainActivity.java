@@ -2,20 +2,18 @@ package com.covid19tracker;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.VoiceInteractor;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,11 +43,13 @@ public class MainActivity extends AppCompatActivity {
     TextView stateActiveCases, stateConfirmed, stateDeceased, stateRecovered, cChanges, rChanges, dChanges;
     String State;
     Spinner stateView;
+    int check = 0;
     FusedLocationProviderClient fusedLocationProviderClient;
 
     RecyclerView recyclerView;
     RecyclerView.Adapter<DistrictAdapter.ViewHolder> mAdapter;
     RecyclerView.LayoutManager layoutManager;
+    ArrayAdapter<String> arrayAdapter;
 
     List<Districts> districtsList;
     ArrayList<String>  States;
@@ -81,7 +81,23 @@ public class MainActivity extends AppCompatActivity {
         cChanges = findViewById(R.id.textView14);
         rChanges = findViewById(R.id.textView15);
         dChanges = findViewById(R.id.textView16);
+        stateView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) parent.getChildAt(0)).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                ((TextView) parent.getChildAt(0)).setTextSize(16);
+                if (check++ > 0) {
+                    State = String.valueOf(stateView.getSelectedItem());
+                    districtsList.clear();
+                    fun1(State);
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         States = new ArrayList<>();
 
         RequestQueue requestQueue;
@@ -105,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException ex) {
                 ex.printStackTrace();
             }
-        }, error -> Log.d("error", "something fishy " + error));
+        }, Throwable::printStackTrace);
         requestQueue.add(jsonObjectRequest);
         if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 2199);
@@ -131,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                     List<Address> addresses = geocoder.getFromLocation(
                             location.getLatitude(), location.getLongitude(), 1
                     );
-                    stateData(addresses.get(0).getAdminArea(), addresses.get(0).getLocality());
+                    stateData(addresses.get(0).getAdminArea());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -139,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void stateData(final String stateName, final String cityName) {
+    private void stateData(final String stateName) {
         final RequestQueue requestQueue;
         requestQueue = Volley.newRequestQueue(this);
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, "https://api.covidindiatracker.com/state_data.json", null, arrayResponse -> {
@@ -159,21 +175,9 @@ public class MainActivity extends AppCompatActivity {
                         rChanges.setText(stateRChanges);
                         dChanges.setText(stateDChanges);
                         JSONArray array = obj.getJSONArray("districtData");
-                        for (int j = 0; j < array.length(); j++) {
-                            Districts districts = new Districts();
-                            JSONObject obj1 = array.getJSONObject(j);
-                            if (obj1.getString("name").equals(cityName)) {
-                                districts.setName(obj1.getString("name"));
-                                districts.setConfirmed((obj1.getInt("confirmed")));
-                                districtsList.add(districts);
-                            }
-                        }
                         for (int k = 0; k < array.length(); k++) {
                             Districts districts = new Districts();
                             JSONObject obj1 = array.getJSONObject(k);
-                            if (obj1.getString("name").equals(cityName)) {
-                                continue;
-                            }
                             districts.setName(obj1.getString("name"));
                             districts.setConfirmed(obj1.getInt("confirmed"));
                             districtsList.add(districts);
@@ -182,28 +186,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     String state=obj.getString("state");
                     States.add(state);
-                    stateView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            State = String.valueOf(stateView.getSelectedItem());
-                            ((TextView )parent.getChildAt(0)).setTextColor(ContextCompat.getColor(getApplicationContext(),R.color.colorAccent));
-                            ((TextView)parent.getChildAt(0)).setTextSize(16);
-                            try {
-                                if(obj.getString("state").equals(State)){
-                                    Log.d("error",State);
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-
-                        }
-                    });
                 }
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, States);
+                arrayAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, States);
                 arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 stateView.setAdapter(arrayAdapter);
                 int spinner = arrayAdapter.getPosition(stateName);
@@ -214,8 +198,49 @@ public class MainActivity extends AppCompatActivity {
             }
             mAdapter = new DistrictAdapter(districtsList);
             recyclerView.setAdapter(mAdapter);
-        }, error -> Log.d("error", "something fishy " + error));
+        }, Throwable::printStackTrace);
         requestQueue.add(jsonArrayRequest);
     }
 
+    private void fun1(String state) {
+        final RequestQueue requestQueue;
+        requestQueue = Volley.newRequestQueue(this);
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, "https://api.covidindiatracker.com/state_data.json", null, arrayResponse -> {
+            try {
+                for (int i = 0; i < arrayResponse.length(); i++) {
+                    JSONObject obj = arrayResponse.getJSONObject(i);
+                    if (obj.getString("state").equals(state)) {
+                        stateActiveCases.setText(String.valueOf(obj.getInt("active")));
+                        stateConfirmed.setText(String.valueOf(obj.getInt("confirmed")));
+                        stateRecovered.setText(String.valueOf(obj.getInt("recovered")));
+                        stateDeceased.setText((String.valueOf(obj.getInt("deaths"))));
+                        String stateCChanges, stateRChanges, stateDChanges;
+                        stateCChanges = "+" + obj.getInt("cChanges");
+                        stateRChanges = "+" + obj.getInt("rChanges");
+                        stateDChanges = "+" + obj.getInt("dChanges");
+                        cChanges.setText(stateCChanges);
+                        rChanges.setText(stateRChanges);
+                        dChanges.setText(stateDChanges);
+                        JSONArray array = obj.getJSONArray("districtData");
+                        for (int k = 0; k < array.length(); k++) {
+                            Districts districts = new Districts();
+                            JSONObject obj1 = array.getJSONObject(k);
+                            districts.setName(obj1.getString("name"));
+                            districts.setConfirmed(obj1.getInt("confirmed"));
+                            districtsList.add(districts);
+                        }
+                    }
+                }
+                mAdapter = new DistrictAdapter(districtsList);
+                recyclerView.setAdapter(mAdapter);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, Throwable::printStackTrace);
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    public void about(View view) {
+        startActivity(new Intent(MainActivity.this, About.class));
+    }
 }

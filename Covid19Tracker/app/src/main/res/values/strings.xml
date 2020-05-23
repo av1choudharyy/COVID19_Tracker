@@ -2,20 +2,9 @@
     <string name="app_name">COVID Tracker</string>
     <string name="recovered">Recovered</string>
     <string name="confirmed">Confirmed</string>
-    <string name="cases_today">Cases Today</string>
     <string name="total_active_cases">Active Cases</string>
-    <string name="total_tests_conducted">Tests Conducted</string>
     <string name="deceased">Deceased</string>
-    <string name="covid_19_india_stats">COVID-19 India Stats</string>
-    <string name="header">header</string>
     <string name="district">District</string>
-    <string name="name">name</string>
-    <string name="summary">Summary</string>
-    <string name="detailed_data">Detailed Data</string>
-    <string name="details">Details</string>
-    <string name="about">About</string>
-    <string name="active">Active</string>
-    <string name="state_ut">State/UT</string>
     <string name="india">India</string>
     <string name="designed_by_freepik">Designed by Freepik</string>
     <string name="code_on_github">Code on : <a href = "https://www.github.com/av1choudhary/Covid19_tracker">Github</a></string>
@@ -25,4 +14,5 @@
     <string name="icon_and_graphics_downloaded_from_flaticon_freepik">Icon and Graphics Downloaded from Flaticon/Freepik</string>
     <string name="apis_used">APIs used : <a href = "https://api.covidindiatracker.com/state_data.json">API 1</a> <a href ="https://coronavirus-19-api.herokuapp.com/countries/india">API 2</a></string>
     <string name="contact_for_attribution_copyright_etc"><a href ="mailto:choudharyabhishek2199@gmail.com?subject=Covid%2019%20Tracker">Contact(for attribution,copyright etc.)</a></string>
+    <string name="navigation">navigation</string>
 </resources>

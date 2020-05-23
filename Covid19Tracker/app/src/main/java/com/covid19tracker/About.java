@@ -1,7 +1,9 @@
 package com.covid19tracker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,5 +23,10 @@ public class About extends AppCompatActivity {
         api.setMovementMethod(LinkMovementMethod.getInstance());
         final TextView contact = findViewById(R.id.textView50);
         contact.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    public void home(View view) {
+        startActivity(new Intent(About.this, MainActivity.class));
+        finish();
     }
 }

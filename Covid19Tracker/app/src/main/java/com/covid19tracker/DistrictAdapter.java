@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,16 +53,8 @@ public class DistrictAdapter extends RecyclerView.Adapter<DistrictAdapter.ViewHo
             name = itemView.findViewById(R.id.textView17);
             confirmed = itemView.findViewById(R.id.textView20);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            itemView.setOnClickListener(view -> {
 
-                    Districts districts1 = (Districts) view.getTag();
-
-                    Toast.makeText(view.getContext(), districts1.getName() + " " + districts1.getConfirmed(), Toast.LENGTH_SHORT).show();
-
-
-                }
             });
 
         }
