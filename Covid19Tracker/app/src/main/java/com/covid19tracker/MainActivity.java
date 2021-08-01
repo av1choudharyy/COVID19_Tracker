@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -145,6 +146,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
             Location location = task.getResult();
             if (location != null) {
@@ -164,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
     private void stateData(final String stateName, final String cityName) {
         final RequestQueue requestQueue;
         requestQueue = Volley.newRequestQueue(this);
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, "https://api.covidindiatracker.com/state_data.json", null, arrayResponse -> {
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, "https://api.covid19india.org/v4/min/data.min.json", null, arrayResponse -> {
             try {
                 for (int i = 0; i < arrayResponse.length(); i++) {
                     JSONObject obj = arrayResponse.getJSONObject(i);
@@ -223,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
     private void fun1(String state) {
         final RequestQueue requestQueue;
         requestQueue = Volley.newRequestQueue(this);
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, "https://api.covidindiatracker.com/state_data.json", null, arrayResponse -> {
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, "https://api.covid19india.org/v4/min/data.min.json", null, arrayResponse -> {
             try {
                 for (int i = 0; i < arrayResponse.length(); i++) {
                     JSONObject obj = arrayResponse.getJSONObject(i);
